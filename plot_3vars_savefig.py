@@ -114,7 +114,7 @@ plt.plot(code2_bw, "b-x")
 plt.plot(code3_bw, "g-^")
 
 plt.xlabel("Problem Sizes")
-plt.ylabel(" of memory bandwidth utilized")
+plt.ylabel("%% of memory bandwidth utilized")
 
 plt.legend(varNames, loc="best")
 
