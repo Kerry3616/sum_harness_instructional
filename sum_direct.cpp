@@ -28,7 +28,7 @@ sum(int64_t N, int64_t A[])
 
    // adds 1 for every index there is
    for (int64_t i = 0; i < N; i++) {
-      sum += A[i];
+      sum += 1;
    }
 
    return sum;
