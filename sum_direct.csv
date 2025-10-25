@@ -1,0 +1,9 @@
+# author: Kerry Yu, Oct 2025
+# CSC 656-01 Coding Project #2: Performance Analysis
+Problem Size,code 1,code 2,code 3
+8388608
+16777216
+33554432
+67108864
+134217728
+268435456

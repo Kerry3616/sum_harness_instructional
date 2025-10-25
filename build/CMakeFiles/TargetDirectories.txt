@@ -1,6 +1,0 @@
-/global/homes/k/kerry/sum_harness_instructional/build/CMakeFiles/rebuild_cache.dir
-/global/homes/k/kerry/sum_harness_instructional/build/CMakeFiles/edit_cache.dir
-/global/homes/k/kerry/sum_harness_instructional/build/CMakeFiles/sum_indirect.dir
-/global/homes/k/kerry/sum_harness_instructional/build/CMakeFiles/sum_vector.dir
-/global/homes/k/kerry/sum_harness_instructional/build/CMakeFiles/sum_direct.dir
-/global/homes/k/kerry/sum_harness_instructional/build/CMakeFiles/benchmark.dir
