@@ -67,6 +67,7 @@ plt.grid(axis='both')
 # save the figure before trying to show the plot
 plt.savefig(runtime_fname, dpi=300)
 
+plt.show()
 
 # MFLOPS = (problem size / 10^6) / time
 code1_mflops = [((problem_sizes[i] / code1_time[i]) / 1e6) for i in range(len(problem_sizes))]
@@ -146,6 +147,5 @@ plt.legend(varNames, loc="best")
 plt.grid(axis='both')
 
 plt.savefig(latency_fname, dpi=300)
-plt.show()
 
 # EOF
