@@ -20,7 +20,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-fname = "sample_data_3vars.csv"
+fname = "data_3vars.csv"
 df = pd.read_csv(fname, comment="#")
 print(df)
 
@@ -65,5 +65,72 @@ plt.legend(varNames, loc="best")
 plt.grid(axis='both')
 
 plt.show()
+
+# MFLOPS = (problem size / 10^6) / time
+code1_mflops = [((problem_sizes[i] / code1_time[i]) / 1e6) for i in range(len(problem_sizes))]
+code2_mflops = [((problem_sizes[i] / code2_time[i]) / 1e6) for i in range(len(problem_sizes))]
+code3_mflops = [((problem_sizes[i] / code3_time[i]) / 1e6) for i in range(len(problem_sizes))]
+
+plt.title("MFLOP/s Comparison of 3 Codes")
+
+xlocs = [i for i in range(len(problem_sizes))]
+
+plt.xticks(xlocs, problem_sizes)
+
+plt.plot(code1_mflops, "r-o")
+plt.plot(code2_mflops, "b-x")
+plt.plot(code3_mflops, "g-^")
+
+plt.xlabel("Problem Sizes")
+plt.ylabel("MFLOP/s")
+
+plt.legend(varNames, loc="best")  # same ordering: direct, vector, indirect
+
+plt.grid(axis='both')
+
+# bandwidth is (8 bytes/time) / (capacity * 10^9 to convert capacity to bytes)
+peak = 448 * 1000 # converts GPU-GPU memory in TBs to GBs
+code1_bw = [(((problem_sizes[i] * 8) / code1_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
+code2_bw = [(((problem_sizes[i] * 8) / code2_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
+code3_bw = [(((problem_sizes[i] * 8) / code3_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
+
+plt.title("Peak Memory Bandwidth Utilization of 3 Codes")
+
+xlocs = [i for i in range(len(problem_sizes))]
+
+plt.xticks(xlocs, problem_sizes)
+
+plt.plot(code1_bw, "r-o")
+plt.plot(code2_bw, "b-x")
+plt.plot(code3_bw, "g-^")
+
+plt.xlabel("Problem Sizes")
+plt.ylabel("% of memory bandwidth utilized")
+
+plt.legend(varNames, loc="best")
+
+plt.grid(axis='both')
+
+# latency = (t/N) * 10^9 convert from seconds to nano seconds for readability
+code1_latency = [(code1_time[i] / problem_sizes[i]) * 1e9 for i in range(len(problem_sizes))]
+code2_latency = [(code2_time[i] / problem_sizes[i]) * 1e9 for i in range(len(problem_sizes))]
+code3_latency = [(code3_time[i] / problem_sizes[i]) * 1e9 for i in range(len(problem_sizes))]
+
+plt.title("Memory Latency of 3 Codes")
+
+xlocs = [i for i in range(len(problem_sizes))]
+
+plt.xticks(xlocs, problem_sizes)
+
+plt.plot(code1_latency, "r-o")
+plt.plot(code2_latency, "b-x")
+plt.plot(code3_latency, "g-^")
+
+plt.xlabel("Problem Sizes")
+plt.ylabel("Latency (nano seconds)")
+
+plt.legend(varNames, loc="best")
+
+plt.grid(axis='both')
 
 # EOF
