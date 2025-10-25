@@ -97,9 +97,9 @@ plt.savefig(MFLOP_fname, dpi=300)
 
 peak = 448 * 1000 # converts GPU-GPU memory in TBs to GBs
 # bandwidth is (8 bytes/time) / (capacity * 10^9 to convert capacity to bytes)
-code1_bw = [(((problem_sizes[i] * 8) / code1_time[i] / 1e9) / peak) * 100 for i in range(len(problem_sizes))]
-code2_bw = [(((problem_sizes[i] * 8) / code2_time[i] / 1e9) / peak) * 100 for i in range(len(problem_sizes))]
-code3_bw = [(((problem_sizes[i] * 8) / code3_time[i] / 1e9) / peak) * 100 for i in range(len(problem_sizes))]
+code1_bw = [(((problem_sizes[i] * 8) / code1_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
+code2_bw = [(((problem_sizes[i] * 8) / code2_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
+code3_bw = [(((problem_sizes[i] * 8) / code3_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
 
 plt.figure()
 
@@ -114,7 +114,7 @@ plt.plot(code2_bw, "b-x")
 plt.plot(code3_bw, "g-^")
 
 plt.xlabel("Problem Sizes")
-plt.ylabel("% peak memory bandwidth utilized")
+plt.ylabel("% of memory bandwidth utilized")
 
 plt.legend(varNames, loc="best")
 
@@ -140,7 +140,7 @@ plt.plot(code2_latency, "b-x")
 plt.plot(code3_latency, "g-^")
 
 plt.xlabel("Problem Sizes")
-plt.ylabel("Latency (ns per element)")
+plt.ylabel("Latency (nano seconds)")
 
 plt.legend(varNames, loc="best")
 
