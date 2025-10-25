@@ -12,11 +12,6 @@ void
 setup(int64_t N, int64_t A[])
 {
    printf(" inside direct_sum problem_setup, N=%lld \n", N);
-
-   for (int64_t i = 0; i < N; i++) {
-      A[i] = 1;
-   }
-   
 }
 
 int64_t
@@ -26,7 +21,7 @@ sum(int64_t N, int64_t A[])
 
    int64_t sum = 0;
 
-   // adds 1 for every index there is
+   // adds 1 for every N there is
    for (int64_t i = 0; i < N; i++) {
       sum += 1;
    }
