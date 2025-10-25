@@ -19,7 +19,10 @@ Assumptions: developed and tested using Python version 3.8.8 on macOS 11.6
 import pandas as pd
 import matplotlib.pyplot as plt
 
-plot_fname = "myplot.png"
+runtime_fname = "runtime.png"
+MFLOP_fname = "MFLOP.png"
+bandwidth_fname = "bandwidth.png"
+latency_fname = "latency.png"
 
 fname = "data_3vars.csv"
 df = pd.read_csv(fname, comment="#")
@@ -37,9 +40,11 @@ code1_time = df[var_names[1]].values.tolist()
 code2_time = df[var_names[2]].values.tolist()
 code3_time = df[var_names[3]].values.tolist()
 
+varNames = [var_names[1], var_names[2], var_names[3]]
+
 plt.figure()
 
-plt.title("Comparison of 3 Codes")
+plt.title("Runtime Comparison of 3 Codes")
 
 xlocs = [i for i in range(len(problem_sizes))]
 
@@ -55,57 +60,95 @@ plt.plot(code3_time, "g-^")
 plt.xlabel("Problem Sizes")
 plt.ylabel("runtime")
 
-varNames = [var_names[1], var_names[2], var_names[3]]
 plt.legend(varNames, loc="best")
 
 plt.grid(axis='both')
 
 # save the figure before trying to show the plot
-plt.savefig(plot_fname, dpi=300)
+plt.savefig(runtime_fname, dpi=300)
 
 
 plt.show()
-
-df["direct_mflops"] = df["Problem Size"] / (df["direct"] * 1e6)
-df["vector_mflops"] = df["Problem Size"] / (df["vector"] * 1e6)
-df["indirect_mflops"] = df["Problem Size"] / (df["indirect"] * 1e6)
+# MFLOPS = (problem size / 10^6) / time
+code1_mflops = [((problem_sizes[i] / code1_time[i]) / 1e6) for i in range(len(problem_sizes))]
+code2_mflops = [((problem_sizes[i] / code2_time[i]) / 1e6) for i in range(len(problem_sizes))]
+code3_mflops = [((problem_sizes[i] / code3_time[i]) / 1e6) for i in range(len(problem_sizes))]
 
 plt.figure()
+
 plt.title("MFLOP/s Comparison of 3 Codes")
-plt.xlabel("Problem Size")
+
+xlocs = [i for i in range(len(problem_sizes))]
+
+plt.xticks(xlocs, problem_sizes)
+
+plt.plot(code1_mflops, "r-o")
+plt.plot(code2_mflops, "b-x")
+plt.plot(code3_mflops, "g-^")
+
+plt.xlabel("Problem Sizes")
 plt.ylabel("MFLOP/s")
-plt.xticks(range(len(problem_sizes)), problem_sizes, rotation=45)
 
-plt.plot(df["direct_mflops"].tolist(), "r-o", label="direct")
-plt.plot(df["vector_mflops"].tolist(), "b-x", label="vector")
-plt.plot(df["indirect_mflops"].tolist(), "g-^", label="indirect")
+plt.legend(varNames, loc="best")  # same ordering: direct, vector, indirect
 
-plt.legend(loc="best")
-plt.grid(True)
-plt.tight_layout()
-plt.savefig("MFLOP.png", dpi=300)
+plt.grid(axis='both')
+
+plt.savefig(MFLOP_fname, dpi=300)
 plt.show()
 
-
-PEAK_BW = 100  # GB/s, change to your system's peak
-# Convert problem size to bytes (int64 = 8 bytes per element)
-df["direct_bw"] = (df["Problem Size"] * 8) / df["direct"] / (PEAK_BW * 1e9) * 100
-df["vector_bw"] = (df["Problem Size"] * 8) / df["vector"] / (PEAK_BW * 1e9) * 100
-df["indirect_bw"] = (df["Problem Size"] * 8) / df["indirect"] / (PEAK_BW * 1e9) * 100
+peak = 448 * 1000 # converts GPU-GPU memory in TBs to GBs
+# bandwidth is (8 bytes/time) / (capacity * 10^9 to convert capacity to bytes)
+code1_bw = [((((problem_sizes[i] * 8) / code1_time[i]) / 1e9) / peak) * 100 for i in range(len(problem_sizes))]
+code2_bw = [((((problem_sizes[i] * 8) / code2_time[i]) / 1e9) / peak) * 100 for i in range(len(problem_sizes))]
+code3_bw = [((((problem_sizes[i] * 8) / code3_time[i]) / 1e9) / peak) * 100 for i in range(len(problem_sizes))]
 
 plt.figure()
-plt.title("Memory Bandwidth Utilization of 3 Codes")
-plt.xlabel("Problem Size")
-plt.ylabel("% Peak Memory Bandwidth")
-plt.xticks(range(len(problem_sizes)), problem_sizes, rotation=45)
 
-plt.plot(df["direct_bw"].tolist(), "r-o", label="direct")
-plt.plot(df["vector_bw"].tolist(), "b-x", label="vector")
-plt.plot(df["indirect_bw"].tolist(), "g-^", label="indirect")
+plt.title("Peak Memory Bandwidth Utilization of 3 Codes")
 
-plt.legend(loc="best")
-plt.grid(True)
-plt.tight_layout()
-plt.savefig("bandwidth_plot.png", dpi=300)
+xlocs = [i for i in range(len(problem_sizes))]
+
+plt.xticks(xlocs, problem_sizes)
+
+plt.plot(code1_bw, "r-o")
+plt.plot(code2_bw, "b-x")
+plt.plot(code3_bw, "g-^")
+
+plt.xlabel("Problem Sizes")
+plt.ylabel("% peak memory bandwidth utilized")
+
+plt.legend(varNames, loc="best")
+
+plt.grid(axis='both')
+
+plt.savefig(bandwidth_fname, dpi=300)
 plt.show()
+
+# latency = (t/N) * 10^9 convert from seconds to nano seconds for readability
+code1_latency = [(code1_time[i] / problem_sizes[i]) * 1e9 for i in range(len(problem_sizes))]
+code2_latency = [(code2_time[i] / problem_sizes[i]) * 1e9 for i in range(len(problem_sizes))]
+code3_latency = [(code3_time[i] / problem_sizes[i]) * 1e9 for i in range(len(problem_sizes))]
+
+plt.figure()
+
+plt.title("Memory Latency of 3 Codes")
+
+xlocs = [i for i in range(len(problem_sizes))]
+
+plt.xticks(xlocs, problem_sizes)
+
+plt.plot(code1_latency, "r-o")
+plt.plot(code2_latency, "b-x")
+plt.plot(code3_latency, "g-^")
+
+plt.xlabel("Problem Sizes")
+plt.ylabel("Latency (ns per element)")
+
+plt.legend(varNames, loc="best")
+
+plt.grid(axis='both')
+
+plt.savefig(latency_fname, dpi=300)
+plt.show()
+
 # EOF
