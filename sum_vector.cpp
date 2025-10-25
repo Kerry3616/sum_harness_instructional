@@ -26,6 +26,7 @@ sum(int64_t N, int64_t A[])
 
    int64_t sum = 0;
 
+   // adds the value inside every index from (0 - N-1)
    for (int64_t i = 0; i < N; i++) {
       sum += A[i];
    }

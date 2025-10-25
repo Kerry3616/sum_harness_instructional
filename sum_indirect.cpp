@@ -27,6 +27,7 @@ sum(int64_t N, int64_t A[])
 
    int64_t sum = 0;
 
+   // you have to go through different positions in the array to get the right order
    for (int64_t i = 0; i < N; i++) {
       sum += A[A[i]];
     }
