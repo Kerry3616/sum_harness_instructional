@@ -68,7 +68,6 @@ plt.grid(axis='both')
 plt.savefig(runtime_fname, dpi=300)
 
 
-plt.show()
 # MFLOPS = (problem size / 10^6) / time
 code1_mflops = [((problem_sizes[i] / code1_time[i]) / 1e6) for i in range(len(problem_sizes))]
 code2_mflops = [((problem_sizes[i] / code2_time[i]) / 1e6) for i in range(len(problem_sizes))]
@@ -94,7 +93,6 @@ plt.legend(varNames, loc="best")  # same ordering: direct, vector, indirect
 plt.grid(axis='both')
 
 plt.savefig(MFLOP_fname, dpi=300)
-plt.show()
 
 peak = 448 * 1000 # converts GPU-GPU memory in TBs to GBs
 # bandwidth is (8 bytes/time) / (capacity * 10^9 to convert capacity to bytes)
@@ -122,7 +120,6 @@ plt.legend(varNames, loc="best")
 plt.grid(axis='both')
 
 plt.savefig(bandwidth_fname, dpi=300)
-plt.show()
 
 # latency = (t/N) * 10^9 convert from seconds to nano seconds for readability
 code1_latency = [(code1_time[i] / problem_sizes[i]) * 1e9 for i in range(len(problem_sizes))]
