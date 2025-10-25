@@ -95,8 +95,8 @@ plt.grid(axis='both')
 
 plt.savefig(MFLOP_fname, dpi=300)
 
-peak = 448 * 1000 # converts GPU-GPU memory in TBs to GBs
 # bandwidth is (8 bytes/time) / (capacity * 10^9 to convert capacity to bytes)
+peak = 448 * 1000 # converts GPU-GPU memory in TBs to GBs
 code1_bw = [(((problem_sizes[i] * 8) / code1_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
 code2_bw = [(((problem_sizes[i] * 8) / code2_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
 code3_bw = [(((problem_sizes[i] * 8) / code3_time[i]) / (1e9 / peak)) * 100 for i in range(len(problem_sizes))]
@@ -114,7 +114,7 @@ plt.plot(code2_bw, "b-x")
 plt.plot(code3_bw, "g-^")
 
 plt.xlabel("Problem Sizes")
-plt.ylabel("%% of memory bandwidth utilized")
+plt.ylabel(" of memory bandwidth utilized")
 
 plt.legend(varNames, loc="best")
 
