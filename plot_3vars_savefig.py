@@ -6,7 +6,7 @@ October 2022
 
 Description: This code loads a .csv file and creates a 3-variable plot, and saves it to a file named "myplot.png"
 
-Inputs: the named file "sample_data_3vars.csv"
+Inputs: the named file "data_3vars.csv"
 
 Outputs: displays a chart with matplotlib
 
@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 plot_fname = "myplot.png"
 
-fname = "sample_data_3vars.csv"
+fname = "data_3vars.csv"
 df = pd.read_csv(fname, comment="#")
 print(df)
 
